@@ -27,11 +27,13 @@ proc dopad {str} {
 
 proc acs:main {sock addr port} {
 	global km
-	if {[eof $sock]} {global socks; tnda set "socks/$sock/on" 0; ::rc4::RC4Final $km($sock);return}
+	if {[eof $sock]} {global socks; tnda set "socks/$sock/on" 0; ::rc4::RC4Final $km($sock);close $sock;return}
 	gets $sock stuff
 	set got [::rc4::RC4 $km($sock) [::base64::decode $stuff]]
-	set send "<$addr $port> "
+	set send "$addr:$port:"
 	append send $got
+	if {$got == ""} {return}
+	puts stdout "$addr $port $got"
 	foreach {sck chk} [tnda get "socks"] {
 		if {[dict get $chk on] != 1} {continue}
 		if {$sck == $sock} {continue}
