@@ -13,7 +13,7 @@ set km(1) 0
 proc acs:server {sock addr port} {
 	global socks km
 	puts stdout "Accepted connection from $addr $port on $sock"
-	fconfigure $sock -buffering line
+	fconfigure $sock -buffering line -buffersize 1024
 	tnda set "socks/$sock/on" 1
 	set km($sock) [::rc4::RC4Init $::key]
 	fileevent $sock readable [list acs:main $sock $addr $port]
@@ -28,9 +28,9 @@ proc dopad {str} {
 proc acs:main {sock addr port} {
 	global km
 	if {[eof $sock]} {global socks; tnda set "socks/$sock/on" 0; ::rc4::RC4Final $km($sock);return}
-	set stuff [gets $sock]
+	gets $sock stuff
 	set got [::rc4::RC4 $km($sock) [::base64::decode $stuff]]
-	set send "<$addr:$port> "
+	set send "<$addr $port> "
 	append send $got
 	foreach {sck chk} [tnda get "socks"] {
 		if {[dict get $chk on] != 1} {continue}

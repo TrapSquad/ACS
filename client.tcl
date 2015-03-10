@@ -31,8 +31,8 @@ puts stdout ""
 
 set sock [socket [lindex $::argv 0] [lindex $::argv 1]]
 set km [::rc4::RC4Init $::key]
-fconfigure $sock -buffering line
-fconfigure stdin -buffering line
+fconfigure $sock -buffering line -buffersize 1024
+fconfigure stdin -buffering line -buffersize 1024
 fileevent $sock readable dosock
 fileevent stdin readable dostdin
 vwait NeverSet
