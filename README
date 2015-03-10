@@ -1,0 +1,3 @@
+ACS is the Advanced Chat System, a system for encrypted chat through RC4.
+ACS is soon to be extended into an IRC like protocol. Currently, though, it's
+a broker system.
