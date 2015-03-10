@@ -20,7 +20,7 @@ proc dopad {str} {
 }
 
 proc dostdin {} {
-	set putout [::base64::encode [::rc4::RC4 $::km [gets stdin]]]
+	set putout [::base64::encode -maxlen 1024 [::rc4::RC4 $::km [gets stdin]]]
 	puts $::sock $putout
 }
 

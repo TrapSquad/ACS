@@ -36,7 +36,7 @@ proc acs:main {sock addr port} {
 		if {[dict get $chk on] != 1} {continue}
 		if {$sck == $sock} {continue}
 		set ssend [::rc4::RC4 $km($sck) $send]
-		catch [list puts $sck [::base64::encode $ssend]]
+		catch [list puts $sck [::base64::encode -maxlen 1024 $ssend]]
 	}
 }
 
